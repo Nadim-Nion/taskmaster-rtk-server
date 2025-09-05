@@ -20,6 +20,11 @@ const Task = mongoose.model("Task", taskSchema);
 
 app.use(express.json());
 
+// Home route
+app.get("/", (req, res) => {
+  res.send("Task Management API");
+})
+
 // Get all tasks
 app.get("/api/tasks", async (req: Request, res: Response) => {
   try {
