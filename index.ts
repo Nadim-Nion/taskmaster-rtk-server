@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import QueryBuilder from "./QueryBuilder";
+import cors from "cors";
 
 const app = express();
 
@@ -11,7 +12,7 @@ mongoose.connect("mongodb://localhost:27017/tasksdb");
 const taskSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
-  priority: { type: String, enum: ["low", "medium", "high"], required: true },
+  priority: { type: String, enum: ["Low", "Medium", "High"], required: true },
   dueDate: { type: Date },
   isCompleted: { type: Boolean, default: false },
 });
@@ -19,11 +20,16 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model("Task", taskSchema);
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 // Home route
 app.get("/", (req, res) => {
   res.send("Task Management API");
-})
+});
 
 // Get all tasks
 app.get("/api/tasks", async (req: Request, res: Response) => {
